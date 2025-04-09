@@ -41,4 +41,27 @@ public class BookService {
     public void deleteBook(Long id) {
         bookRepository.deleteById(id);
     }
+
+    public List<Book> searchBooks(String author, String category, Double rating, String title) {
+        List<Book> results = bookRepository.findAll();
+    
+        if (author != null && !author.isEmpty()) {
+            results.retainAll(bookRepository.findByAuthorContainingIgnoreCase(author));
+        }
+    
+        if (category != null && !category.isEmpty()) {
+            results.retainAll(bookRepository.findByCategoryContainingIgnoreCase(category));
+        }
+    
+        if (rating != null) {
+            results.retainAll(bookRepository.findByRatingGreaterThanEqual(rating));
+        }
+    
+        if (title != null && !title.isEmpty()) {
+            results.retainAll(bookRepository.findByTitleContainingIgnoreCase(title));
+        }
+    
+        return results;
+    }
+    
 }
